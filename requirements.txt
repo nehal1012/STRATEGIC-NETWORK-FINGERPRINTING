@@ -1,0 +1,7 @@
+Flask
+shodan
+requests
+pandas
+nmap
+networkx
+matplotlib

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NextGen Network Profiler</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-image: url('https://www.cloud4c.com/kr/sites/kr/files/2023-07/july-blog-banner3.webp');
+            background-size: cover;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            padding: 30px 40px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.5); /* Adding a background color for better readability */
+        }
+
+        h1 {
+            margin-bottom: 25px;
+            color: #fbfaf9;
+            font-size: 28px;
+            text-transform: uppercase;
+            font-weight: bolder;
+        }
+
+        .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            color: whitesmoke;
+            margin-right: 10px;
+            display: none; /* Hide the label but keep it accessible for screen readers */
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #ccc;
+            border-radius: 6px 0 0 6px;
+            box-sizing: border-box;
+            font-size: 20px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+            outline: none;
+        }
+
+        .btn {
+            background-color: rgb(47, 0, 255);
+            color: whitesmoke;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 0 6px 6px 0;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #41388e;
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn img {
+            width: 20px;
+            height: 20px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>NextGen Network Profiler</h1>
+        <form method="POST">
+            <div class="form-group">
+                <label for="query">IP Address:</label>
+                <input type="text" id="query" name="query" placeholder="e.g. 192.168.0.1" required>
+                <button type="submit" class="btn">
+                    <img src="https://img.icons8.com/material-rounded/24/ffffff/search.png" alt="Search">
+                </button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

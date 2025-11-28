@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+        .container {
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 800px;
+            text-align: left;
+            background-color: white;
+            overflow-y: auto;
+            max-height: 90vh;
+        }
+        h1 {
+            color: #4CAF50;
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: #333;
+            font-size: 20px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #394a3a;
+            color: white;
+        }
+        td pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            text-align: center;
+            transition: background-color 0.3s, transform 0.3s;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+        .button:active {
+            transform: translateY(0);
+        }
+        .info-section {
+            margin-bottom: 20px;
+        }
+        .info-item {
+            margin-bottom: 10px;
+        }
+        .multi-column {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .multi-column span {
+            flex: 1 1 calc(33% - 20px);
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Results</h1>
+
+        {% if type == 'url' %}
+            <div class="info-section">
+                <h2>URL Info</h2>
+                <pre>{{ url_info }}</pre>
+            </div>
+        {% elif type == 'domain' %}
+            <div class="info-section">
+                
+                {% if shodan_info.error %}
+                    <div class="info-item">
+                        <strong>Error:</strong> <span>{{ shodan_info.error }}</span>
+                    </div>
+                {% else %}
+                    <div class="info-item">
+                        <strong>Domain:</strong> <span>{{ shodan_info.domain }}</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Tags:</strong> <span>{{ shodan_info.tags | join(', ') }}</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Subdomains:</strong>
+                        <div class="multi-column">
+                            {% for subdomain in shodan_info.subdomains | sort %}
+                                <span>{{ subdomain }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+                
+                {% if hunter_info.Error %}
+                    <div class="info-item">
+                        <strong>Error:</strong> <span>{{ hunter_info.Error }}</span>
+                    </div>
+                
+                {% else %}
+                    <div class="info-item">
+                        
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Domain</th>
+                                    <th>IP</th>
+                                    <th>Port</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in hunter_info.data.list %}
+                                <tr>
+                                    <td>{{ item.domain }}</td>
+                                    <td>{{ item.ip }}</td>
+                                    <td>{{ item.port }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}
+                
+                <pre>{{ nse_info }}</pre>
+                
+                <pre>{{ nmap_info }}</pre>
+            </div>
+        {% elif type == 'ip' %}
+            <div class="info-section">
+                
+                {% if shodan_info.error %}
+                    <div class="info-item">
+                        <strong>Error:</strong> <span>{{ shodan_info.error }}</span>
+                    </div>
+                {% else %}
+                    <div class="info-item">
+                        <strong>IP:</strong> <span>{{ shodan_info.ip_str }}</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Organization:</strong> <span>{{ shodan_info.org }}</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>ISP:</strong> <span>{{ shodan_info.isp }}</span>
+                    </div>
+                    {% if shodan_info.data %}
+                        <div class="info-section">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Country</th>
+                                        <th>IP Address</th>
+                                        <th>Port Number</th>
+                                        <th>Country Code</th>
+                                        <th>Latitude</th>
+                                        <th>Longitude</th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for entry in shodan_info.data %}
+                                    <tr>
+                                        <td>{{ entry.location.country_name }}</td>
+                                        <td>{{ entry.ip_str }}</td>
+                                        <td>{{ entry.port }}</td>
+                                        <td>{{ entry.location.country_code }}</td>
+                                        <td>{{ entry.location.latitude }}</td>
+                                        <td>{{ entry.location.longitude }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% endif %}
+                {% endif %}
+                
+                {% if hunter_info.Error %}
+                    <div class="info-item">
+                        <strong>Error:</strong> <span>{{ hunter_info.Error }}</span>
+                    </div>
+                
+                {% else %}
+                    <div class="info-item">
+                        
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Domain</th>
+                                    <th>IP</th>
+                                    <th>Port</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in hunter_info.data.list %}
+                                <tr>
+                                    <td>{{ item.domain }}</td>
+                                    <td>{{ item.ip }}</td>
+                                    <td>{{ item.port }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}
+                
+                <pre>{{ nse_info }}</pre>
+                
+                <pre>{{ nmap_info }}</pre>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
